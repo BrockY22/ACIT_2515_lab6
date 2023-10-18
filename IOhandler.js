@@ -30,11 +30,15 @@ const unzip = (pathIn, pathOut) => {
   //ALL ERRORS MUST SHOW IN .catch in PROMISE CHAIN
   return new Promise((res,rej)=>{
     const zip = new AdmZip(pathIn);
-    zip.extractAllToAsync(pathOut, true);
-    res()
-
-
-  })
+    zip.extractAllToAsync(pathOut, true, (err)=>{
+      if(err){
+        rej(err)
+      }
+      else{
+        res("Extraction operation complete")
+      }
+    });
+  });
 };
 
 /**
