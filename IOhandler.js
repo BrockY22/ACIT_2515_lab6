@@ -1,3 +1,4 @@
+
 /*
  * Project: Milestone 1
  * File Name: IOhandler.js
@@ -58,8 +59,6 @@ const readDir = (dir) => {
     });
   });
 
-
-
 };
 
 /**
@@ -70,7 +69,29 @@ const readDir = (dir) => {
  * @param {string} pathProcessed
  * @return {promise}
  */
-const grayScale = (pathIn, pathOut) => {};
+const grayScale = (pathIn, pathOut) => {
+  return new Promise((res,rej)=>{
+    const readableStream = fs.createReadStream(pathIn);
+    readableStream.on("error", (err)=>{rej(err)});
+    readableStream.pipe(new PNG({})).on("parsed",function(){
+      for (let y = 0; y < this.height; y++){
+        for(let x = 0; x < this.width;x++){
+            let idx = (this.width * y + x) << 2;
+
+            const grayCol = (this.data[idx]*0.2126 + this.data[idx+1]*0.7151+ this.data[idx+2]*0.0722);
+            this.data[idx] = grayCol;
+            this.data[idx+1] = grayCol;
+            this.data[idx+2] = grayCol;
+        }
+      }
+      const writeableStream = fs.createWriteStream(pathOut);
+      this.pack()
+        .on("error", (err)=>{rej(err)})
+        .pipe(writeableStream)
+        .on("finish", ()=> {res(`${path.basename(pathIn)} has been Gray Scaled SUCCESSFULLY!`)});  
+    })
+  });
+};
 
 module.exports = {
   unzip,
