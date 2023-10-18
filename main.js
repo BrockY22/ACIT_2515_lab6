@@ -18,8 +18,8 @@ const pathProcessed = path.join(__dirname, "grayscaled");
 IOhandler.unzip(zipFilePath, pathUnzipped)
     .then((extractionComplete)=> console.log(extractionComplete))
     .then(()=> IOhandler.readDir(pathUnzipped))
+    //.then((filtedArray) => console.log(filtedArray))
     
     
-    
-    .then((grayScaleComplete) => console.log(grayScaleComplete))
+    //.then((grayScaleComplete) => console.log(grayScaleComplete))
     .catch((err) => console.log(err))
